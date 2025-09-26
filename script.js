@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // Elementos do DOM (removido o inputArquivo pois não existe mais)
+    // Elementos do DOM
     const gameContainer = document.getElementById('game-container');
     const statusContainer = document.getElementById('status-container');
     const resultadoFinalContainer = document.getElementById('resultado-final-container');
@@ -31,17 +31,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let rodadaAtual = 0; 
     let totalErros = 0;
 
-    // --- NOVA LÓGICA DE CARREGAMENTO AUTOMÁTICO ---
-    // Esta função busca o arquivo CSV do servidor assim que a página carrega.
     function carregarPalavrasAutomaticamente() {
-        fetch('palavras.csv') // Busca o arquivo 'palavras.csv' que está junto com o index.html
+        fetch('palavras.csv')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Erro de rede ao buscar palavras.csv');
                 }
-                return response.text(); // Converte a resposta em texto
+                return response.text();
             })
-            .then(texto => { // Quando o texto estiver pronto...
+            .then(texto => {
                 const separador = texto.includes(';') ? ';' : ',';
                 todosOsParesMaster = texto.split('\n').filter(row => row.trim() !== '').map(linha => {
                     const colunas = linha.split(separador);
@@ -54,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
                 
-                prepararEIniciarJogo(); // Inicia o jogo!
+                prepararEIniciarJogo();
             })
             .catch(error => {
                 console.error('Erro ao carregar o arquivo de palavras:', error);
@@ -62,11 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-    // Chama a nova função para iniciar o processo.
     carregarPalavrasAutomaticamente();
     
-    // --- O RESTO DO CÓDIGO PERMANECE O MESMO ---
-
     function prepararEIniciarJogo() {
         rodadaAtual = 0;
         totalErros = 0;
@@ -123,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 tempPt.classList.add('desaparecer');
                 tempIt.classList.add('desaparecer');
                 paresRestantes--;
-                verificarFimDaRodada();
+                verificarFimDaRodada(); // Chama a verificação
                 aguardandoVerificacao = false;
             }, 800);
         } else { 
@@ -142,11 +137,18 @@ document.addEventListener('DOMContentLoaded', () => {
         palavraSelecionadaIt = null;
     }
 
+    // ***** FUNÇÃO CORRIGIDA *****
     function verificarFimDaRodada() {
-        if (rodadaAtual < TOTAL_RODADAS) {
-            setTimeout(iniciarRodada, 2000);
-        } else {
-            exibirResultadoFinal();
+        // A lógica correta: só avança se os pares restantes forem 0
+        if (paresRestantes === 0) {
+            rodadaAtual++; // Avança para a próxima rodada
+            if (rodadaAtual < TOTAL_RODADAS) {
+                // Se ainda não acabou o jogo, inicia a próxima rodada após 2 segundos
+                setTimeout(iniciarRodada, 2000);
+            } else {
+                // Se acabaram as rodadas, mostra o resultado final
+                exibirResultadoFinal();
+            }
         }
     }
 
