@@ -5,18 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jogo de Combinar Palavras (IT-PT)</title>
     <link rel="stylesheet" href="style.css">
-    
     <link rel="manifest" href="manifest.json">
-
 </head>
 <body>
 
     <h1>Combine as Palavras</h1>
-
-    <div id="loader-container">
-        <p>Carregue sua lista de palavras (arquivo .csv com no mínimo 100 palavras):</p>
-        <input type="file" id="arquivo-csv" accept=".csv">
-    </div>
 
     <div id="status-container" style="display: none;">
         <span>Rodada: <span id="rodada-atual">1</span>/10</span>
@@ -42,7 +35,7 @@
     </div>
 
     <audio id="som-sucesso" src="success.mp3"></audio>
-    <audio id="som-erro" src="error.mp3"></audio>
+    <audio id="som-erro"src="error.mp3"></audio>
 
     <script src="script.js"></script>
 

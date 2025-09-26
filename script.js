@@ -1,9 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // Elementos do DOM
-    const inputArquivo = document.getElementById('arquivo-csv');
+    // Elementos do DOM (removido o inputArquivo pois não existe mais)
     const gameContainer = document.getElementById('game-container');
-    const loaderContainer = document.getElementById('loader-container');
     const statusContainer = document.getElementById('status-container');
     const resultadoFinalContainer = document.getElementById('resultado-final-container');
     const colunaPt = document.getElementById('coluna-portugues');
@@ -15,15 +13,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalErrosFinalEl = document.getElementById('total-erros-final');
     const notaFinalEl = document.getElementById('nota-final');
     const btnJogarNovamente = document.getElementById('btn-jogar-novamente');
-    const mensagemFinalEl = document.getElementById('mensagem-final'); // Elemento da nova mensagem
+    const mensagemFinalEl = document.getElementById('mensagem-final');
 
-    // Lista com os nomes das 10 imagens de fundo
     const imagensDeFundo = [
         'fundo0.jpg', 'fundo1.jpg', 'fundo2.jpg', 'fundo3.jpg', 'fundo4.jpg',
         'fundo5.jpg', 'fundo6.jpg', 'fundo7.jpg', 'fundo8.jpg', 'fundo9.jpg'
     ];
 
-    // Variáveis de estado
     let todosOsParesMaster = []; 
     let palavrasDoJogo = []; 
     let palavraSelecionadaPt = null;
@@ -31,36 +27,45 @@ document.addEventListener('DOMContentLoaded', () => {
     let paresRestantes = 0;
     let aguardandoVerificacao = false;
 
-    // Variáveis de pontuação
     const TOTAL_RODADAS = 10; 
     let rodadaAtual = 0; 
     let totalErros = 0;
 
-    // --- LÓGICA PRINCIPAL ---
+    // --- NOVA LÓGICA DE CARREGAMENTO AUTOMÁTICO ---
+    // Esta função busca o arquivo CSV do servidor assim que a página carrega.
+    function carregarPalavrasAutomaticamente() {
+        fetch('palavras.csv') // Busca o arquivo 'palavras.csv' que está junto com o index.html
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro de rede ao buscar palavras.csv');
+                }
+                return response.text(); // Converte a resposta em texto
+            })
+            .then(texto => { // Quando o texto estiver pronto...
+                const separador = texto.includes(';') ? ';' : ',';
+                todosOsParesMaster = texto.split('\n').filter(row => row.trim() !== '').map(linha => {
+                    const colunas = linha.split(separador);
+                    if (colunas.length >= 2) return { pt: colunas[0].trim(), it: colunas[1].trim() };
+                    return null;
+                }).filter(par => par !== null);
 
-    inputArquivo.addEventListener('change', (event) => {
-        const arquivo = event.target.files[0];
-        if (!arquivo) return;
+                if (todosOsParesMaster.length < 100) {
+                    alert(`Erro! O arquivo palavras.csv precisa ter pelo menos 100 pares de palavras. Encontrados: ${todosOsParesMaster.length}.`);
+                    return;
+                }
+                
+                prepararEIniciarJogo(); // Inicia o jogo!
+            })
+            .catch(error => {
+                console.error('Erro ao carregar o arquivo de palavras:', error);
+                alert('Não foi possível carregar o arquivo de palavras. Verifique se o arquivo "palavras.csv" está na pasta do projeto e tente novamente.');
+            });
+    }
 
-        const leitor = new FileReader();
-        leitor.onload = (e) => {
-            const texto = e.target.result;
-            const separador = texto.includes(';') ? ';' : ',';
-            todosOsParesMaster = texto.split('\n').filter(row => row.trim() !== '').map(linha => {
-                const colunas = linha.split(separador);
-                if (colunas.length >= 2) return { pt: colunas[0].trim(), it: colunas[1].trim() };
-                return null;
-            }).filter(par => par !== null);
-
-            if (todosOsParesMaster.length < 100) {
-                alert(`Erro! Sua lista precisa ter pelo menos 100 pares de palavras para jogar as 10 rodadas. Seu arquivo tem ${todosOsParesMaster.length}.`);
-                return;
-            }
-            
-            prepararEIniciarJogo();
-        };
-        leitor.readAsText(arquivo);
-    });
+    // Chama a nova função para iniciar o processo.
+    carregarPalavrasAutomaticamente();
+    
+    // --- O RESTO DO CÓDIGO PERMANECE O MESMO ---
 
     function prepararEIniciarJogo() {
         rodadaAtual = 0;
@@ -69,7 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
         embaralhar(todosOsParesMaster);
         palavrasDoJogo = todosOsParesMaster.slice(0, 100);
 
-        loaderContainer.style.display = 'none';
         resultadoFinalContainer.style.display = 'none';
         gameContainer.style.display = 'flex';
         statusContainer.style.display = 'flex';
@@ -139,17 +143,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function verificarFimDaRodada() {
-        if (paresRestantes === 0) {
-            rodadaAtual++;
-            if (rodadaAtual < TOTAL_RODADAS) {
-                setTimeout(iniciarRodada, 2000);
-            } else {
-                exibirResultadoFinal();
-            }
+        if (rodadaAtual < TOTAL_RODADAS) {
+            setTimeout(iniciarRodada, 2000);
+        } else {
+            exibirResultadoFinal();
         }
     }
 
-    // ***** FUNÇÃO MODIFICADA *****
     function exibirResultadoFinal() {
         gameContainer.style.display = 'none';
         statusContainer.style.display = 'none';
@@ -159,12 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
         totalErrosFinalEl.textContent = totalErros;
         notaFinalEl.textContent = nota.toFixed(1);
 
-        // Lógica da cor da nota
-        if (nota >= 8.0) notaFinalEl.style.color = '#28a745';
-        else if (nota >= 5.0) notaFinalEl.style.color = '#ffc107';
-        else notaFinalEl.style.color = '#dc3545';
-
-        // --- LÓGICA DA NOVA MENSAGEM ---
         let mensagem = '';
         if (nota >= 9) {
             mensagem = "Terrone ou Polentone?";
@@ -176,6 +170,10 @@ document.addEventListener('DOMContentLoaded', () => {
             mensagem = "Você pode melhorar!";
         }
         mensagemFinalEl.textContent = mensagem;
+
+        if (nota >= 8.0) notaFinalEl.style.color = '#28a745';
+        else if (nota >= 5.0) notaFinalEl.style.color = '#ffc107';
+        else notaFinalEl.style.color = '#dc3545';
     }
 
     function atualizarStatus() {
