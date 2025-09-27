@@ -7,41 +7,33 @@ body {
     justify-content: center;
     min-height: 100vh;
     margin: 0;
-
-    /* Propriedades para o fundo dinâmico */
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    transition: background-image 1s ease-in-out; /* Efeito suave de transição ao trocar o fundo */
+    transition: background-image 1s ease-in-out;
 }
-
 h1 {
     color: #0056b3;
     text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7);
 }
-
 #game-container {
     display: flex;
     gap: 40px;
     margin-top: 20px;
 }
-
 .coluna {
     width: 250px;
     padding: 15px;
-    /* Fundo semi-transparente para as colunas, combinando com o fundo principal */
     background-color: rgba(248, 249, 250, 0.9);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
-
 .coluna h2 {
     text-align: center;
     border-bottom: 2px solid #ddd;
     padding-bottom: 10px;
     margin-top: 0;
 }
-
 .palavra {
     padding: 12px;
     margin: 8px 0;
@@ -53,37 +45,30 @@ h1 {
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s, transform 0.2s, opacity 0.5s;
 }
-
 .palavra:hover {
     background-color: #e9ecef;
     transform: scale(1.03);
 }
-
 .palavra.selecionada {
     background-color: #007bff;
     color: white;
     border-color: #0056b3;
 }
-
 .palavra.correto {
     background-color: #28a745 !important;
     color: white !important;
     border-color: #1e7e34 !important;
 }
-
 .palavra.incorreto {
     background-color: #dc3545 !important;
     color: white !important;
     border-color: #b21f2d !important;
 }
-
 .palavra.desaparecer {
     opacity: 0;
     transform: scale(0.8);
     pointer-events: none;
 }
-
-/* Estilos para o placar e resultado final */
 #status-container {
     font-size: 1.2em;
     font-weight: bold;
@@ -92,42 +77,36 @@ h1 {
     width: 540px;
     display: flex;
     justify-content: space-between;
-    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8); /* Sombra no texto para melhor leitura */
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
 }
-
 #resultado-final-container {
     padding: 30px;
-    background-color: rgba(255, 255, 255, 0.95); /* Fundo semi-transparente para o resultado */
+    background-color: rgba(255, 255, 255, 0.95);
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     text-align: center;
     width: 400px;
     margin-top: 20px;
 }
-
 #resultado-final-container h2 {
     color: #0056b3;
     margin-top: 0;
 }
-
 #resultado-final-container h3 {
     font-size: 1.8em;
 }
-
 #nota-final {
     color: #28a745;
     font-size: 1.5em;
 }
-
 #mensagem-final {
     font-size: 1.2em;
     font-style: italic;
     color: #0056b3;
     margin-top: 15px;
     font-weight: bold;
-    min-height: 30px; /* Evita que o layout "pule" */
+    min-height: 30px;
 }
-
 #btn-jogar-novamente {
     background-color: #007bff;
     color: white;
@@ -139,78 +118,67 @@ h1 {
     margin-top: 20px;
     transition: background-color 0.3s;
 }
-
 #btn-jogar-novamente:hover {
     background-color: #0056b3;
 }
-
-/* Estilos para o rodapé com os créditos */
 footer {
-    position: fixed; /* Fixa o elemento na tela */
-    bottom: 10px;    /* 10 pixels de distância da parte de baixo */
-    right: 15px;     /* 15 pixels de distância da direita */
+    position: fixed;
+    bottom: 10px;
+    right: 15px;
     font-size: 0.9em;
     color: #555;
     text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
 }
 
-
 /* --- ESTILOS PARA TELAS PEQUENAS (CELULARES) --- */
-
 @media (max-width: 600px) {
-
     body {
         justify-content: flex-start;
         padding-top: 15px;
     }
-
     h1 {
-        font-size: 1.5em; /* Reduz o título principal */
+        font-size: 1.5em;
         text-align: center;
     }
-
     #game-container {
-        /* MANTÉM AS COLUNAS LADO A LADO */
         flex-direction: row; 
-        gap: 10px; /* Diminui o espaço entre elas */
+        gap: 10px;
         margin-top: 15px;
         width: 100%;
         justify-content: center;
     }
-
     .coluna {
-        /* CADA COLUNA OCUPA 45% DA TELA */
         width: 45vw;
         padding: 8px;
     }
-    
     .coluna h2 {
         font-size: 1em;
     }
-
     #status-container {
-        width: 95vw; /* Ocupa a largura da tela */
+        width: 95vw;
         font-size: 1em;
         margin-bottom: 10px;
     }
-    
     .palavra {
-        font-size: 0.8em; /* Reduz o tamanho da fonte das palavras */
+        font-size: 0.8em;
         padding: 8px;
+        /* REGRA DE TESTE ABAIXO */
+        background-color: yellow !important;
     }
-
-    /* Ajusta a tela de resultado final para telas pequenas */
     #resultado-final-container {
         width: 90vw;
         padding: 20px;
     }
-
     #resultado-final-container h2 {
         font-size: 1.5em;
     }
-
     #resultado-final-container h3 {
         font-size: 1.3em;
     }
-
     #mensagem-final {
+        font-size: 1.1em;
+    }
+    footer {
+        font-size: 0.7em;
+    }
+}
