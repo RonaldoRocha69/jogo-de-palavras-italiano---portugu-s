@@ -162,23 +162,4 @@ footer {
     .palavra {
         font-size: 0.8em;
         padding: 8px;
-        /* REGRA DE TESTE ABAIXO */
-        background-color: yellow !important;
-    }
-    #resultado-final-container {
-        width: 90vw;
-        padding: 20px;
-    }
-    #resultado-final-container h2 {
-        font-size: 1.5em;
-    }
-    #resultado-final-container h3 {
-        font-size: 1.3em;
-    }
-    #mensagem-final {
-        font-size: 1.1em;
-    }
-    footer {
-        font-size: 0.7em;
-    }
-}
+        /* A cor amarela de teste foi removida daqui
