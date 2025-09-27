@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // Elementos do DOM
     const gameContainer = document.getElementById('game-container');
     const statusContainer = document.getElementById('status-container');
     const resultadoFinalContainer = document.getElementById('resultado-final-container');
@@ -118,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 tempPt.classList.add('desaparecer');
                 tempIt.classList.add('desaparecer');
                 paresRestantes--;
-                verificarFimDaRodada(); // Chama a verificação
+                verificarFimDaRodada();
                 aguardandoVerificacao = false;
             }, 800);
         } else { 
@@ -137,16 +136,12 @@ document.addEventListener('DOMContentLoaded', () => {
         palavraSelecionadaIt = null;
     }
 
-    // ***** FUNÇÃO CORRIGIDA *****
     function verificarFimDaRodada() {
-        // A lógica correta: só avança se os pares restantes forem 0
         if (paresRestantes === 0) {
-            rodadaAtual++; // Avança para a próxima rodada
+            rodadaAtual++;
             if (rodadaAtual < TOTAL_RODADAS) {
-                // Se ainda não acabou o jogo, inicia a próxima rodada após 2 segundos
                 setTimeout(iniciarRodada, 2000);
             } else {
-                // Se acabaram as rodadas, mostra o resultado final
                 exibirResultadoFinal();
             }
         }
